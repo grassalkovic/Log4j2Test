@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="baseDir">logs</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
+        </Console>
+
+        <RollingFile name="RollingFileOnStartup" filename="${baseDir}/rfos.log"
+                     filepattern="${baseDir}/rfos-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileCron" filename="${baseDir}/rfc.log"
+                     filepattern="${baseDir}/rfc-%d{HH:mm:ss.SSS}-%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
+            <Policies>
+                <CronTriggeringPolicy schedule="* * * * * ?"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${baseDir}" maxDepth="2">
+                    <IfFileName glob="rfc-*.log" />
+                    <IfLastModified age="10S"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+
+        <Logger name="Bar" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileOnStartup"/>
+            <AppenderRef ref="RollingFileCron"/>
+        </Logger>
+
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileOnStartup"/>
+            <AppenderRef ref="RollingFileCron"/>
+        </Root>
+
+    </Loggers>
+</Configuration>
