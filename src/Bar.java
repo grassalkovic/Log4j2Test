@@ -8,27 +8,39 @@ public class Bar {
     private static Logger logger = LogManager.getLogger(Bar.class);
 
     public Bar(){
-        logger.entry();
-        logger.exit();
+        logger.traceEntry("Bar");
+        logger.traceExit();
     }
 
     public void logVoid( int a, String s, String t, int b, int c, int d){
 
-        logger.entry(a, s, t, b, c, d);
+        logger.traceEntry("logVoid", a, s, t, b, c, d);
 
 
         logger.trace("trace log happened void");
         logger.error("error log happened void");
 
-        logger.exit();
+        logger.traceExit();
     }
 
     public boolean logBoolean(){
-        logger.traceEntry();
+        logger.traceEntry("logBoolean");
 
         logger.trace("trace log happened boolean");
         logger.error("error log happened boolean");
 
-        return logger.exit(false);
+        return logger.traceExit(false);
+    }
+
+    public void raiseException(int a, String b) throws fooException {
+        logger.traceEntry("raiseException", a, b);
+
+        if (a == 4){
+            logger.warn("value 4 will cause throwing of an exception");
+
+            throw new fooException("Foo exception has been raised", null);
+        }
+
+        logger.traceExit();
     }
 }

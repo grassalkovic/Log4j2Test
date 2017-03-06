@@ -1,11 +1,15 @@
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+
+import static org.apache.logging.log4j.Level.ERROR;
 
 /**
  * Created by slavka on 3/3/17.
  */
 public class Log4j2Test {
+
     private static Logger logger = LogManager.getLogger(Log4j2Test.class);
 //    this is the same ase the one above
 //    private static Logger logger = LogManager.getLogger();
@@ -27,5 +31,13 @@ public class Log4j2Test {
 
         bar.logBoolean();
         bar.logVoid(4,"String", "abcd", 4, 4, 4);
+
+        try {
+            bar.raiseException(4, "String");
+        } catch (fooException e) {
+
+            logger.catching(ERROR, e);
+
+        }
     }
 }

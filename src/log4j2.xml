@@ -1,45 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
+
+    <!--Here you can define your custom properties used within this XML file-->
     <Properties>
         <Property name="baseDir">logs</Property>
     </Properties>
 
+    <!--Appenders which deliver the log events into desired output-->
     <Appenders>
+        <!--Console output -->
         <Console name="Console" target="SYSTEM_OUT">
+            <!--pattern for log output, each appender can haw its own pattern-->
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
         </Console>
 
+        <!--Rolling File which creates the log file on each startup-->
         <RollingFile name="RollingFileOnStartup" filename="${baseDir}/rfos.log"
                      filepattern="${baseDir}/rfos-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
             <Policies>
+                <!--Triggering new file on each startup-->
                 <OnStartupTriggeringPolicy/>
             </Policies>
         </RollingFile>
 
+        <!--Rolling file which creates new file on each second and deletes logs older then 60 seconds-->
         <RollingFile name="RollingFileCron" filename="${baseDir}/rfc.log"
-                     filepattern="${baseDir}/rfc-%d{HH:mm:ss.SSS}-%i.log">
+                     filepattern="${baseDir}/rfc-%d{yyyy-MM-dd-HH-mm-ss.SSS}-%i.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
             <Policies>
+                <!--Cron trigger, set to create file in each second
+                  - schedule setup:
+                  -     &1 - seconds(0-59, special characters: - * /)
+                  -     &2 - minutes(0-59, special characters: - * /)
+                  -     &3 - hours(0-23,  - * /)
+                  -     &4 - Day-of-month(1-31, special characters: - * ? / L W)
+                  -     &5 - Month(0-11 or JAN-DEC, special characters: - * /)
+                  -     &6 - Day-of-Week(1-7 or SUN-SAT, special characters: - * ? / L #)
+                  -     &7 - Year (Optional)(empty, 1970-2199, special characters: - * /)
+                  - The '*' character is used to specify all values. For example, "*" in the minute field means "every minute".
+                  - The '?' character is allowed for the day-of-month and day-of-week fields. It is used to specify 'no specific value'. This is useful when you need to specify something in one of the two fields, but not the other.
+                  - The '-' character is used to specify ranges For example "10-12" in the hour field means "the hours 10, 11 and 12".
+                  - The ',' character is used to specify additional values. For example "MON,WED,FRI" in the day-of-week field means "the days Monday, Wednesday, and Friday".
+                  - for more information on special character visit https://logging.apache.org/log4j/2.x/log4j-core/apidocs/org/apache/logging/log4j/core/util/CronExpression.html
+                  -->
                 <CronTriggeringPolicy schedule="* * * * * ?"/>
             </Policies>
             <DefaultRolloverStrategy>
+                <!--Deletion of files older than 60 seconds-->
                 <Delete basePath="${baseDir}" maxDepth="2">
                     <IfFileName glob="rfc-*.log" />
-                    <IfLastModified age="10S"/>
+                    <!-- Examples for age parameter of IfLastModified
+                      - "PT20S"     - parses as "20 seconds"
+                      - "PT15M"     - parses as "15 minutes" (where a minute is 60 seconds)
+                      - "PT10H"     - parses as "10 hours" (where an hour is 3600 seconds)
+                      - "P2D"       - parses as "2 days" (where a day is 24 hours or 86400 seconds)
+                      - "P2DT3H4M"  - parses as "2 days, 3 hours and 4 minutes"
+                      -->
+                    <IfLastModified age="60S"/>
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
 
     </Appenders>
-    <Loggers>
 
+    <Loggers>
+        <!--logger for Bar instance, set log trace level, and additivity set to false to not duplicate
+           -messages which were displayed by root or other loggers
+           -->
         <Logger name="Bar" level="trace" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFileOnStartup"/>
             <AppenderRef ref="RollingFileCron"/>
         </Logger>
 
+        <!--logger for Log4j2Test, set to trace level-->
+        <Logger name="Log4j2Test" level="trace">
+            <AppenderRef ref="RollingFileOnStartup"/>
+        </Logger>
+
+        <!--root logger set to errors level which displays messages from the whole project-->
         <Root level="error">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFileOnStartup"/>
