@@ -10,7 +10,7 @@
     <Appenders>
         <!--Console output -->
         <Console name="Console" target="SYSTEM_OUT">
-            <!--pattern for log output, each appender can haw its own pattern-->
+            <!--pattern for log output, each appender can hawe its own pattern-->
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %M - %msg%n"/>
         </Console>
 
@@ -75,7 +75,7 @@
         </Logger>
 
         <!--logger for Log4j2Test, set to trace level-->
-        <Logger name="Log4j2Test" level="trace">
+        <Logger name="Log4j2Test" level="trace" additivity="false">
             <AppenderRef ref="RollingFileOnStartup"/>
         </Logger>
 

@@ -2,7 +2,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by slavka on 3/3/17.
+ * Created by peter.kompan on 3/3/17.
+ *
+ * Class bar for testing different loggers
  */
 public class Bar {
     private static Logger logger = LogManager.getLogger(Bar.class);
@@ -38,9 +40,26 @@ public class Bar {
         if (a == 4){
             logger.warn("value 4 will cause throwing of an exception");
 
-            throw new fooException("Foo exception has been raised", null);
+            try {
+                baseException(a);
+            } catch (barException e) {
+                throw new fooException("Foo exception has been raised", e);
+            }
         }
 
         logger.traceExit();
+    }
+
+    private void baseException(int a) throws  barException {
+        logger.traceEntry("baseException");
+
+        if (a == 4){
+            logger.warn("value 4 will cause throwing of an exception");
+
+            throw new barException("Bar exception has been raised", null);
+        }
+
+        logger.traceExit();
+
     }
 }
