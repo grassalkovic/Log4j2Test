@@ -65,7 +65,7 @@
     </Appenders>
 
     <Loggers>
-        <!--logger for Bar instance, set log trace level, and additivity set to false to not duplicate
+        <!--logger for Bar class, set log trace level, and additivity set to false to not duplicate
            -messages which were displayed by root or other loggers
            -->
         <Logger name="Bar" level="trace" additivity="false">
@@ -74,9 +74,11 @@
             <AppenderRef ref="RollingFileCron"/>
         </Logger>
 
-        <!--logger for Log4j2Test, set to trace level-->
+        <!--logger for Log4j2Test class, set to trace level-->
         <Logger name="Log4j2Test" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFileOnStartup"/>
+            <AppenderRef ref="RollingFileCron"/>
         </Logger>
 
         <!--root logger set to errors level which displays messages from the whole project-->
