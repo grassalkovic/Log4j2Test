@@ -4,7 +4,9 @@ import org.apache.logging.log4j.Logger;
 import static org.apache.logging.log4j.Level.ERROR;
 
 /**
- * Created by slavka on 3/3/17.
+ * Created by peter.kompan on 3/3/17.
+ *
+ * Main class for log4j2 testing
  */
 public class Log4j2Test {
 
