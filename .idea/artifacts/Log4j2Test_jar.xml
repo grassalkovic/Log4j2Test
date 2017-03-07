@@ -1,12 +1,10 @@
 <component name="ArtifactManager">
-  <artifact name="Log4j2Test:jar">
+  <artifact type="jar" name="Log4j2Test:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Log4j2Test_jar</output-path>
-    <root id="root">
-      <element id="archive" name="Log4j2Test.jar">
-        <element id="module-output" name="Log4j2Test" />
-      </element>
-      <element id="library" level="project" name="log4j-core-2.8.1" />
-      <element id="library" level="project" name="log4j-api-2.8.1" />
+    <root id="archive" name="Log4j2Test.jar">
+      <element id="module-output" name="Log4j2Test" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-core-2.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-api-2.8.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
